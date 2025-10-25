@@ -53,59 +53,61 @@
         </svg>
     </div>
 
-    <!-- Main Content Area - Pushed to the Bottom -->
-    <div class="flex-grow flex flex-col justify-end p-6 pb-20 space-y-6">
-
-        <!-- Password Prompt Text -->
-        <div class="text-center">
-            <h1 class="text-xl text-white font-semibold mb-2">
-                Enter password to unlock.
-            </h1>
-            <p class="text-sm text-gray-400">
-                Your password contains at least 4 characters, including at least 1 letter.
-            </p>
-        </div>
-
-        <!-- Working Password Form -->
-        <form id="passwordForm" class="mx-auto w-full max-w-md space-y-4" onsubmit="handleFormSubmit(event)">
-
-            <!-- Password Input Field with Glass Effect -->
-            <div class="flex items-center p-4 rounded-3xl shadow-2xl glass-effect transition duration-300">
-                
-                <input 
-                    type="password" 
-                    id="passwordInput" 
-                    name="password"
-                    placeholder="Enter password" 
-                    class="flex-grow bg-transparent text-white placeholder-gray-500 text-lg focus:outline-none"
-                    style="letter-spacing: 2px;"
-                    onfocus="this.placeholder=''"
-                    onblur="this.placeholder='Enter password'"
-                    required
-                >
-                
-                <!-- Password Visibility Toggle Icon -->
-                <svg id="toggleIcon" onclick="togglePasswordVisibility()" class="w-6 h-6 text-gray-400 cursor-pointer ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <!-- Initial state: Eye Closed -->
-                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.057 10.057 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.974 9.974 0 011.563-3.029m5.874.004a6.002 6.002 0 014.288 8.441M15 12a3 3 0 11-6 0 3 3 0 016 0zM17 17l-2-2"></path>
-                </svg>
+    <!-- 1. Password Block (Centered) - This section grows and centers its content -->
+    <div class="flex-grow flex flex-col justify-center items-center p-6"> 
+        <div class="w-full max-w-md space-y-6">
+            <!-- Password Prompt Text -->
+            <div class="text-center">
+                <h1 class="text-xl text-white font-semibold mb-2">
+                    Enter password to unlock.
+                </h1>
+                <p class="text-sm text-gray-400">
+                    Your password contains at least 4 characters, including at least 1 letter.
+                </p>
             </div>
 
-            <!-- Enter Button (Submit) - Styled with Glass Effect -->
-            <button type="submit" class="w-full py-4 glass-effect text-white font-medium rounded-3xl text-lg hover:bg-gray-700 transition duration-150 shadow-md border-transparent">
-                Enter
-            </button>
-        </form>
+            <!-- Working Password Form -->
+            <form id="passwordForm" class="mx-auto w-full space-y-4" onsubmit="handleFormSubmit(event)">
 
-        <!-- Emergency Call Button (Outside the form) -->
-        <div class="mx-auto w-full max-w-xs pt-6">
+                <!-- Password Input Field with Glass Effect -->
+                <div class="flex items-center p-4 rounded-3xl shadow-2xl glass-effect transition duration-300">
+                    
+                    <input 
+                        type="password" 
+                        id="passwordInput" 
+                        name="password"
+                        placeholder="Enter password" 
+                        class="flex-grow bg-transparent text-white placeholder-gray-500 text-lg focus:outline-none"
+                        style="letter-spacing: 2px;"
+                        onfocus="this.placeholder=''"
+                        onblur="this.placeholder='Enter password'"
+                        required
+                    >
+                    
+                    <!-- Password Visibility Toggle Icon -->
+                    <svg id="toggleIcon" onclick="togglePasswordVisibility()" class="w-6 h-6 text-gray-400 cursor-pointer ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Initial state: Eye Closed -->
+                        <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.057 10.057 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.974 9.974 0 011.563-3.029m5.874.004a6.002 6.002 0 014.288 8.441M15 12a3 3 0 11-6 0 3 3 0 016 0zM17 17l-2-2"></path>
+                    </svg>
+                </div>
+
+                <!-- Enter Button (Submit) - Styled with Glass Effect -->
+                <button type="submit" class="w-full py-4 glass-effect text-white font-medium rounded-3xl text-lg hover:bg-gray-700 transition duration-150 shadow-md border-transparent">
+                    Enter
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- 2. Emergency Call Button (Fixed at Bottom) - This section does not grow -->
+    <div class="w-full flex justify-center pb-20">
+        <div class="mx-auto w-full max-w-xs px-6">
             <button class="w-full py-4 bg-gray-700 text-white font-medium rounded-xl hover:bg-gray-600 transition duration-150 shadow-md">
                 Emergency call
             </button>
         </div>
-        
     </div>
-
+    
     <script>
         // Simple JavaScript function to toggle password visibility
         function togglePasswordVisibility() {
@@ -132,7 +134,6 @@
             
             // Basic, safe simulation of a password check
             if (password.length >= 4 && /[a-zA-Z]/.test(password)) {
-                // IMPORTANT: Using custom modal/message box instead of alert()
                 showMessage('Success! Access Granted (Simulation).', 'green');
             } else {
                 showMessage('Incorrect password or format. Try again.', 'red');
@@ -149,7 +150,7 @@
             if (!messageBox) {
                 messageBox = document.createElement('div');
                 messageBox.id = messageId;
-                messageBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-lg text-center z-50 transition-opacity duration-300';
+                messageBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-lg text-center z-50 transition-opacity duration-300 text-white font-semibold';
                 document.body.appendChild(messageBox);
             }
 
