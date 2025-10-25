@@ -3,25 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Minimal Lock Screen</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Device Locked Screen</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Define the Inter font family for the entire page */
+        html, body {
+            height: 100%;
+            font-family: 'Inter', sans-serif;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Custom gradient for the top section to mimic the light effect */
+        .top-glow {
+            height: 100px;
+            width: 100%;
+            background: radial-gradient(circle at center, rgba(160, 160, 160, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+            position: absolute;
+            top: 0;
+            left: 0;
+        }
+
+        /* Class for the frosted glass (blur) effect on the input container and button */
+        .glass-effect {
+            /* Background color set to a dark, semi-transparent color */
+            background-color: rgba(30, 30, 30, 0.6); 
+            /* The key property for the frosted glass look */
+            backdrop-filter: blur(10px) saturate(150%); 
+            /* Ensure it works on WebKit browsers */
+            -webkit-backdrop-filter: blur(10px) saturate(150%);
+            border: 1px solid rgba(255, 255, 255, 0.05); /* Very subtle white border */
+        }
+        
+        /* Utility for mobile responsiveness of the screen */
+        .max-w-md {
+            max-width: 24rem;
+        }
+    </style>
 </head>
-<body>
-    <div class="phone-screen">
-        <div class="main-content">
-            <div class="time-container">
-                <div class="time">11:56</div>
-                <div class="am-pm">AM</div>
-            </div>
-            <div class="date">Saturday, October 25</div>
-            <div class="notification-prompt">Tap to show notifications</div>
-        </div>
+<body class="bg-black text-white h-screen overflow-hidden flex flex-col">
 
-        <div class="shortcuts">
-            <div class="icon" aria-label="Phone">📞</div>
-            <div class="icon" aria-label="Camera">📷</div>
-        </div>
-
+    <!-- Top Glow Effect & Lock Icon (Simulated Notification Bar Area) -->
+    <div class="relative w-full h-40 flex justify-center pt-8">
+        <div class="top-glow"></div>
+        <!-- Lock Icon -->
+        <svg class="w-8 h-8 text-white z-10" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v3"></path>
+        </svg>
     </div>
+
+    <!-- Main Content Area - Pushed to the Bottom -->
+    <div class="flex-grow flex flex-col justify-end p-6 pb-20 space-y-6">
+
+        <!-- Password Prompt Text -->
+        <div class="text-center">
+            <h1 class="text-xl text-white font-semibold mb-2">
+                Enter password to unlock.
+            </h1>
+            <p class="text-sm text-gray-400">
+                Your password contains at least 4 characters, including at least 1 letter.
+            </p>
+        </div>
+
+        <!-- Working Password Form -->
+        <form id="passwordForm" class="mx-auto w-full max-w-md space-y-4" onsubmit="handleFormSubmit(event)">
+
+            <!-- Password Input Field with Glass Effect -->
+            <div class="flex items-center p-4 rounded-3xl shadow-2xl glass-effect transition duration-300">
+                
+                <input 
+                    type="password" 
+                    id="passwordInput" 
+                    name="password"
+                    placeholder="Enter password" 
+                    class="flex-grow bg-transparent text-white placeholder-gray-500 text-lg focus:outline-none"
+                    style="letter-spacing: 2px;"
+                    onfocus="this.placeholder=''"
+                    onblur="this.placeholder='Enter password'"
+                    required
+                >
+                
+                <!-- Password Visibility Toggle Icon -->
+                <svg id="toggleIcon" onclick="togglePasswordVisibility()" class="w-6 h-6 text-gray-400 cursor-pointer ml-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Initial state: Eye Closed -->
+                    <path id="togglePath" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.057 10.057 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.974 9.974 0 011.563-3.029m5.874.004a6.002 6.002 0 014.288 8.441M15 12a3 3 0 11-6 0 3 3 0 016 0zM17 17l-2-2"></path>
+                </svg>
+            </div>
+
+            <!-- Enter Button (Submit) - Styled with Glass Effect -->
+            <button type="submit" class="w-full py-4 glass-effect text-white font-medium rounded-3xl text-lg hover:bg-gray-700 transition duration-150 shadow-md border-transparent">
+                Enter
+            </button>
+        </form>
+
+        <!-- Emergency Call Button (Outside the form) -->
+        <div class="mx-auto w-full max-w-xs pt-6">
+            <button class="w-full py-4 bg-gray-700 text-white font-medium rounded-xl hover:bg-gray-600 transition duration-150 shadow-md">
+                Emergency call
+            </button>
+        </div>
+        
+    </div>
+
+    <script>
+        // Simple JavaScript function to toggle password visibility
+        function togglePasswordVisibility() {
+            const input = document.getElementById('passwordInput');
+            const iconPath = document.getElementById('togglePath');
+
+            if (input.type === 'password') {
+                input.type = 'text';
+                // Eye Open path
+                iconPath.setAttribute('d', 'M15 12a3 3 0 11-6 0 3 3 0 016 0z');
+            } else {
+                input.type = 'password';
+                // Eye Closed path (original)
+                iconPath.setAttribute('d', 'M13.875 18.825A10.057 10.057 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.974 9.974 0 011.563-3.029m5.874.004a6.002 6.002 0 014.288 8.441M15 12a3 3 0 11-6 0 3 3 0 016 0zM17 17l-2-2');
+            }
+        }
+
+        // Handle form submission (The "Enter" button click)
+        function handleFormSubmit(event) {
+            // Prevent the default form submission (which would refresh the page)
+            event.preventDefault(); 
+            
+            const password = document.getElementById('passwordInput').value;
+            
+            // Basic, safe simulation of a password check
+            if (password.length >= 4 && /[a-zA-Z]/.test(password)) {
+                // IMPORTANT: Using custom modal/message box instead of alert()
+                showMessage('Success! Access Granted (Simulation).', 'green');
+            } else {
+                showMessage('Incorrect password or format. Try again.', 'red');
+            }
+            // Clear the input field for the next attempt
+            document.getElementById('passwordInput').value = '';
+        }
+
+        // Custom function to display a message on the screen (replaces alert())
+        function showMessage(text, color) {
+            const messageId = 'custom-message';
+            let messageBox = document.getElementById(messageId);
+
+            if (!messageBox) {
+                messageBox = document.createElement('div');
+                messageBox.id = messageId;
+                messageBox.className = 'fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 p-4 rounded-lg shadow-lg text-center z-50 transition-opacity duration-300';
+                document.body.appendChild(messageBox);
+            }
+
+            messageBox.textContent = text;
+            messageBox.style.backgroundColor = color === 'green' ? 'rgba(46, 139, 87, 0.9)' : 'rgba(178, 34, 34, 0.9)';
+            messageBox.style.opacity = 1;
+            messageBox.style.display = 'block';
+
+            // Hide the message after 3 seconds
+            setTimeout(() => {
+                messageBox.style.opacity = 0;
+            }, 3000);
+        }
+    </script>
 </body>
 </html>
+
