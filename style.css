@@ -1,0 +1,103 @@
+body {
+    /* Ensures the screen takes up the entire browser window */
+    margin: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: #333333; /* Dark gray background */
+    font-family: 'SamsungSharpSans', 'Helvetica Neue', Arial, sans-serif; /* Placeholder font */
+}
+
+.phone-screen {
+    /* The main container for the phone screen */
+    width: 375px; 
+    height: 812px; 
+    /* Using a dark, moody background for the lock screen look */
+    background-color: #000000; 
+    background-image: linear-gradient(rgba(0, 0, 0, 0.4), rgba(0, 0, 0, 0.6)), url('https://picsum.photos/375/812?blur=3'); 
+    background-size: cover;
+    background-position: center;
+    border-radius: 40px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    position: relative;
+    color: white; 
+    overflow: hidden;
+}
+
+/* --- Main Content (Clock/Date) Styling --- */
+.main-content {
+    position: absolute;
+    /* Move the content down a bit from the very top */
+    top: 25%; 
+    left: 50%;
+    transform: translateX(-50%); 
+    text-align: center;
+    width: 100%;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); 
+}
+
+.time-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    margin-bottom: 5px;
+}
+
+.time {
+    font-size: 5.5rem; /* Large time font */
+    font-weight: 300; /* Light weight for a modern look */
+    line-height: 1;
+}
+
+.am-pm {
+    font-size: 2rem;
+    font-weight: 500;
+    padding-left: 5px;
+    margin-bottom: 8px; 
+    opacity: 0.9;
+}
+
+.date {
+    font-size: 1.1rem;
+    font-weight: 400;
+    opacity: 0.8;
+    margin-top: 15px; /* Spacing between time and date */
+}
+
+.notification-prompt {
+    font-size: 0.9rem;
+    position: absolute;
+    bottom: -150px; 
+    width: 100%;
+    opacity: 0.5;
+    /* Optional: Small dots/lines to represent notification icons */
+    letter-spacing: 5px; 
+    content: "•••"; 
+}
+
+/* --- Bottom Shortcuts - One UI Style --- */
+.shortcuts {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    width: 80%;
+    justify-content: space-between;
+}
+
+.icon {
+    /* Styling for the circular shortcut icons - large and clean */
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background-color: rgba(255, 255, 255, 0.2); /* Semi-transparent background */
+    backdrop-filter: blur(8px); /* Frosted glass effect */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+    /* The border is a subtle touch to mimic the clean separation */
+    border: none; 
+}
