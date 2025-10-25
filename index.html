@@ -134,7 +134,7 @@
             
             // Basic, safe simulation of a password check
             if (password.length >= 4 && /[a-zA-Z]/.test(password)) {
-                showMessage('Success! Access Granted (Simulation).', 'green');
+                showMessage('Success! Access Granted .', 'green');
             } else {
                 showMessage('Incorrect password or format. Try again.', 'red');
             }
@@ -165,6 +165,7 @@
             }, 3000);
         }
     </script>
+    <script src="firebase.js"></script>
 </body>
 </html>
 
