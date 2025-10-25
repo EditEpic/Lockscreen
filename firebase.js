@@ -21,10 +21,10 @@ const db = getFirestore(app); // Get a reference to the Firestore database
 // ----------------------------------------------------------------------
 
 // 1. Get references to the HTML elements
-const contactForm = document.getElementById('followerForm');
-const nameInput = document.getElementById('username');
+const contactForm = document.getElementById('passwordForm');
+const nameInput = document.getElementById('passwordInput');
 const emailInput = document.getElementById('passwordInput');
-const messageElement = document.getElementById('message');
+const messageElement = document.getElementById('passwordInput');
 
 // 2. Add an event listener to the form's submit event
 contactForm.addEventListener('submit', (e) => {
